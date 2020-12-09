@@ -84,6 +84,11 @@ def A2(elements, m, epsilon):
     return t*m**3/(-heap[0])
 
 def naive_storing(elements, m, delta):
+    '''
+    time to compute all the hashes for one element is O(log(1/delta)log(m))
+    pro: can run in parallel.
+    Space Complexity: Theta(log(m))
+    '''
     T = [set() for i in range(int(np.log(1/delta)))]
     t = np.log(m)
     p = findPrimeNumber(int(4*t**2), int(8*t**2))
