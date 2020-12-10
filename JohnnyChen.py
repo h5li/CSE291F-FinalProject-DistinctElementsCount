@@ -43,8 +43,8 @@ def A1_with_prime(elements, prime_number):
     R = 0
 
     for e in elements:
-        if (a*e+b) % prime_number > R:
-            R = (a*e + b) % prime_number
+        hash_val = (a*e + b) % prime_number
+        R = max(gmpy.scan1(int(hash_val)), R)
     return 2**R
 
 def findPrimeNumber(start, end):
@@ -70,7 +70,6 @@ def A2(elements, m, epsilon):
     b = random.randint(1, p-1)
 
     t = math.ceil(96/(epsilon**2))
-
     heap = []
     for i in range(t):
         h = (a*elements[i] + b ) % p
@@ -79,7 +78,7 @@ def A2(elements, m, epsilon):
     for i in range(t, len(elements)):
         h = (a*elements[i] + b ) % p
         max_val = heap[0]
-        if h < max_val:
+        if -h > max_val:
             heapq.heappushpop(heap, -h)
     return t*m**3/(-heap[0])
 
@@ -89,14 +88,14 @@ def naive_storing(elements, m, delta):
     pro: can run in parallel.
     Space Complexity: Theta(log(m))
     '''
-    T = [set() for i in range(int(np.log(1/delta)))]
-    t = np.log(m)
+    T = [set() for i in range(int(np.log2(1/delta)))]
+    t = int(np.log2(m))
     p = findPrimeNumber(int(4*t**2), int(8*t**2))
-    A = [random.randint(1,p-1) for i in range(int(np.log(1/delta))) ]
+    A = [random.randint(1,p-1) for i in range(int(np.log2(1/delta))) ]
 
     for e in elements:
         for i in range(len(T)):
             hash_val = A[i]*e % p
             if hash_val not in T[i] and len(T[i]) < t:
                 T[i].add(hash_val)
-    return max([len(t) for t in T])
+    return max([2**len(t) for t in T])
