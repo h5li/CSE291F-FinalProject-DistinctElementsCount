@@ -7,6 +7,7 @@ import random
 import math
 import heapq
 import numpy as np
+import gmpy
 
 def FR(elements, delta, m):
 
@@ -65,18 +66,18 @@ def A2(elements, m, epsilon):
     A2 outputs Y within the (1-eps)*F0 <= Y <= (1+eps)*F0 with probability at least 1-delta
     Space Complexity: O(1/eps**2 log(n) * log(1/delta))
     '''
-    p = random.randint(m**3, 2*m**3)
-    a = random.randint(1, p-1)
-    b = random.randint(1, p-1)
+    p = np.int64(random.randint(m**3, 2*m**3))
+    a = np.int64(random.randint(1, p-1))
+    b = np.int64(random.randint(1, p-1))
 
     t = math.ceil(96/(epsilon**2))
     heap = []
     for i in range(t):
-        h = (a*elements[i] + b ) % p
+        h = (a*np.int64(elements[i]) + b ) % p
         heapq.heappush(heap, -h)
     
     for i in range(t, len(elements)):
-        h = (a*elements[i] + b ) % p
+        h = (a*np.int64(elements[i])+ b ) % p
         max_val = heap[0]
         if -h > max_val:
             heapq.heappushpop(heap, -h)
